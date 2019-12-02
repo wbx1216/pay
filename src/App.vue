@@ -1,5 +1,5 @@
 <template>
-  <div id="app"> 
+  <div id="app" v-cloak> 
     <router-view/>
   </div>
 </template>
@@ -13,13 +13,17 @@ export default {
 </script>
 
 <style>
- 
+[v-cloak]{
+	display: none;
+}
 #app {
   font-family: '微软雅黑', Helvetica, Arial, sans-serif; 
   color: #000; 
+	height: 100%;
 }
 body,html{
 	margin: 0; 
+	height: 100%;
 } 
 img{
 	display: block;

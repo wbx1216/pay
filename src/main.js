@@ -4,9 +4,12 @@ import router from './router'
 import '@babel/polyfill';
 import Es6Promise from 'es6-promise'
 import VueAwesomeSwiper from 'vue-awesome-swiper'  
+import axios from 'axios';
 // import Vconsole from 'vconsole'
 Es6Promise.polyfill()
 Vue.config.productionTip = false; 
+axios.defaults.withCredentials=true;
+Vue.prototype.$axios = axios;
 Vue.use(VueAwesomeSwiper)
 
 // let vConsole = new Vconsole();

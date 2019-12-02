@@ -7,10 +7,10 @@
 		<div>
 			<div v-for="item in record" class="item">
 				<div class="msg">
-					<div>开通尊贵免广告会员：{{item.day}}</div>
+					<div>{{item.name}}</div>
 					<span>购买时间：{{item.time}}</span>
 				</div>
-				<div class="num"> ￥{{item.num}}</div>
+				<div class="num"> ￥{{item.price}}</div>
 				<div style="clear: both;"></div>
 			</div>
 		</div>
@@ -21,20 +21,13 @@
 		name: "record",
 		data() {
 			return {
-				record: [{
-					day: '12个月',
-					num: "36",
-					time: "2019-11-25 9:25:36"
-				}, {
-					day: '1个月',
-					num: "30",
-					time: "2019-11-25 9:25:36"
-				}, {
-					day: '6个月',
-					num: "30",
-					time: "2019-11-25 9:25:36"
-				}]
+				record: []
 			}
+		},
+		created() {
+			this.$axios.get("../../doc/memberHistory.htm?userId=" + this.$route.query.userId).then((res) => {
+				this.record=res.data.memberRechargeHistory
+			})
 		}
 	}
 </script>
@@ -66,12 +59,13 @@
 		margin: 0 auto;
 		padding: 15px 0px;
 		border-bottom: 1px solid #eee;
-		
+
 		.msg {
 			float: left;
-			font-size:15px;
-			span{
-				color:#949494;
+			font-size: 15px;
+
+			span {
+				color: #949494;
 				font-size: 12px;
 			}
 		}

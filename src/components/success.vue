@@ -31,7 +31,7 @@
 						} else {
 							clearInterval(this.timer);
 							this.timer = null;
-							this.$router.push("./") 
+							this.$router.push("./?userId="+this.$route.query.userId) 
 						}
 					}, 1000)
 				}

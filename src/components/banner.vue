@@ -1,23 +1,25 @@
 <template>
 	<div :style="{height:height}" class="body">
 		<div class="head" style=" margin:0px 13px;"><img src="@/assets/back2.png" @click="$router.back(-1)">
-			<div class="title">会员记录</div>
+			<div class="title">会员权益</div>
 		</div>
-		<swiper :options="swiperOption"  ref="swiperTop">
-			<swiper-slide v-for="item,index in list" class="item"  >
+		<swiper :options="swiperOption" ref="swiperTop" class="swiper-no-swiping">
+			<swiper-slide v-for="item,index in list" class="item">
 				<img :src="require(`../assets/vip_icon${index}.png`)" alt="" class="icon" />
 				<div class="title">{{item.title}}</div>
 			</swiper-slide>
-		</swiper> 
-		<div class="item2">
-			<div class="block">
-				<div class="title">{{list[index].title}}</div>
-				<div class="text">{{list[index].text}}</div>
-				<img :src="require(`../assets/banner${index}.png`)" alt="" class="banner" /> 
-			</div> 
-		<div class="triangle"></div> 
-		</div>
-		<div class="button">立即开通</div>
+		</swiper>
+		<swiper :options="swiperOption2" ref="swiperTop2">
+			<swiper-slide v-for="item,index in list" class="item2">
+				<div class="block">
+					<div class="title">{{list[index].title}}</div>
+					<div class="text">{{list[index].text}}</div>
+					<img :src="require(`../assets/banner${index}.png`)" alt="" class="banner" />
+				</div>
+				<div class="triangle"></div>
+			</swiper-slide>
+		</swiper>
+		<div class="button" @click="$router.back(-1)">立即开通</div>
 	</div>
 </template>
 <script>
@@ -31,7 +33,7 @@
 		components: {
 			swiper,
 			swiperSlide
-		}, 
+		},
 		data() {
 			return {
 				height: "",
@@ -57,65 +59,84 @@
 					title: "敬请期待",
 					text: "更多小狸VIP专属特权开发中，敬请期待"
 				}],
-				index:0,
+				index: 0,
 				swiperOption: {
-					notNextTick: true, 
+					notNextTick: true,
+					noSwiping: true,
 					direction: "horizontal",
 					slidesPerView: 3,
 					spaceBetween: 10,
 					centeredSlides: true,
-					initialSlide :0,
-					loop: true,
-					on: { 
-					          slideChangeTransitionEnd: function () { 
-					             vm.index=this.realIndex 
-					          }
-					        }
+					initialSlide: 0,
+					on: {
+						slideChangeTransitionEnd: function() {
+							vm.index = this.realIndex
+						}
+					}
 					/*横向滑动*/
-				}
+				},
+				swiperOption2: {
+					direction: "horizontal",
+				},
 			}
-		},   
-		 computed: {
-		      swiper() {
-		        return this.$refs.swiperTop.swiper
-		      }
-		    },
-		created() {
-			vm = this;  
-			this.height = window.screen.availHeight + 'px'; 
 		},
-		mounted(){
-			  this.index=this.$route.query.index  
-			  let index=this.index
-			  index=index+3
-			  this.swiper.slideTo(index, 0, false);
+		created() {
+			vm = this;
+			this.$axios.get("../../doc/memberFirstCoin.htm").then((res) => {
+				if (res.data.coin) {
+					this.list[1].text = "首次开通即送尊贵大礼包（" + res.data.coin + "金币直接发放到账户）"
+				}
+			})
+		},
+		computed: {
+			swiper() {
+				return this.$refs.swiperTop.swiper
+			},
+			swiper2() {
+				return this.$refs.swiperTop2.swiper
+			}
+		},
+		mounted() {
+			this.$nextTick(() => {
+				const swiperTop = this.$refs.swiperTop.swiper
+				const swiperTop2 = this.$refs.swiperTop2.swiper
+				swiperTop.controller.control = swiperTop2
+				swiperTop2.controller.control = swiperTop
+			})
+			this.index = this.$route.query.index
+			let index = this.index
+			this.swiper.slideTo(index, 0, false);
+			this.swiper2.slideTo(index, 0, false);
 		}
 	}
 </script>
 
 <style scoped lang="less">
 	@import '../../node_modules/swiper/dist/css/swiper.min.css';
-
 	.swiper-container {
-		width: 85%;
+		width: 100%;
 		margin: 20px auto;
 		color: #FFF;
 	}
 
-	.swiper-slide {
-		transform: scale(0.8);
-		opacity: 0.6;
-	}
+	.swiper-no-swiping {
+		.swiper-slide {
+			transform: scale(0.8);
+			opacity: 0.6;
+		}
 
-	.swiper-slide-active {
-		transform: scale(1);
-		opacity: 1;
+		.swiper-slide-active {
+			transform: scale(1);
+			opacity: 1;
+		}
 	}
 
 	.body {
 		background-image: url(../assets/background.png);
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
+
+		height: 100%;
 	}
 
 	.head {
@@ -155,10 +176,11 @@
 	}
 
 	.item2 {
-		width:85%;
+		width: 85%;
 		margin: 0 auto;
 		padding-top: 20px;
-		position: relative; 
+		position: relative;
+
 		.triangle {
 			width: 0;
 			height: 0;
@@ -166,16 +188,17 @@
 			border-color: transparent transparent white;
 			position: absolute;
 			top: -35px;
-			left:0px;
-			margin:auto;
+			left: 0px;
+			margin: auto;
 			right: 0;
 		}
 
 		.block {
-			width: 100%;
+			width: 90%;
 			border-radius: 5px;
 			background: #FFF;
 			padding: 30px 0px;
+			margin: 0 auto;
 		}
 
 		.title {
@@ -197,13 +220,16 @@
 		}
 
 	}
-	.button{
-		color:#29282b;
+
+	.button {
+		color: #29282b;
 		background: #f7dd8e;
 		line-height: 40px;
-		width:80%;
-		margin: 30px auto;
+		width: 80%;
 		text-align: center;
 		border-radius: 10px;
+		position: absolute;
+		bottom: 30px;
+		left: 10%;
 	}
 </style>
