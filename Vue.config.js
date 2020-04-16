@@ -87,7 +87,7 @@ module.exports = {
 		hotOnly: false,
 		proxy: {
 			 '/': {
-					target: 'http://192.168.20.2:50201/newsflow-book/',
+					target: 'http://192.168.20.2:48001/appadvplat-server/speed/',
 					changeOrigin: true,
 					ws: true,
 					pathRewrite: {

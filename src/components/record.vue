@@ -1,13 +1,14 @@
 <template>
 	<div>
-		<div class="head" style=" margin:0px 13px;"><img src="@/assets/back.png" @click="$router.back(-1)">
+		<div class="head" style=" margin:0px 13px;">
+			<a href="javascript:history.back(-1)" style="width:100px;height: 100%;display: flex;align-items: center;position: absolute;z-index: 9;"><img src="@/assets/back2.png" ></a>
 			<div class="title">购买记录</div>
 		</div>
 		<div style="height:9px;background: #f5f5f5;width:100%"></div>
 		<div>
 			<div v-for="item in record" class="item">
 				<div class="msg">
-					<div>{{item.name}}</div>
+					<div style="font-weight: bold;">{{item.title}}</div>
 					<span>购买时间：{{item.time}}</span>
 				</div>
 				<div class="num"> ￥{{item.price}}</div>
@@ -25,8 +26,9 @@
 			}
 		},
 		created() {
-			this.$axios.get("../../doc/memberHistory.htm?userId=" + this.$route.query.userId).then((res) => {
-				this.record=res.data.memberRechargeHistory
+			this.$axios.get("member/api/purchaseRecords.htm?userId=" + this.$route.query.userId).then((res) => {
+				console.log(res.data.data)
+				this.record=res.data.data
 			})
 		}
 	}
@@ -34,23 +36,17 @@
 <style scoped lang="less">
 	.head {
 		height: 45px;
-		line-height: 45px;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		position: relative;
-
+		line-height: 45px; 
+		position: relative; 
+		text-align: center;
 		img {
-			width: 10px;
+			width: 10px; 
+			position: absolute; 
 		}
 
 		.title {
-			font-size: 16px;
-			color: #191919;
-			text-align: center;
-			position: absolute;
-			width: 50%;
-			left: 25%;
+			font-size: 17px;
+			color: #191919; 
 		}
 	}
 
@@ -65,7 +61,7 @@
 			font-size: 15px;
 
 			span {
-				color: #949494;
+				color: #666;
 				font-size: 12px;
 			}
 		}

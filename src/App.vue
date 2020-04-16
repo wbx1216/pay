@@ -30,5 +30,6 @@ img{
 }
 a{
 	text-decoration: none;
+	-webkit-tap-highlight-color:transparent
 }
 </style>

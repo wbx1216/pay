@@ -12,6 +12,8 @@ axios.defaults.withCredentials=true;
 Vue.prototype.$axios = axios;
 Vue.use(VueAwesomeSwiper)
 
+
+
 // let vConsole = new Vconsole();
 // export default vConsole
 new Vue({
